@@ -30,6 +30,6 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="JWT_SECRET" value="testing_secret_key_for_jwt_please_change_in_production"/>
-        <env name="JWT_TTL" value="60"/>
+        <env name="JWT_TTL" value=60/>
     </php>
 </phpunit>
