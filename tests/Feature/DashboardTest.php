@@ -5,23 +5,27 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Traits\WithJwtAuth;
 
 class DashboardTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithJwtAuth;
 
-    public function test_guests_are_redirected_to_the_login_page()
-    {
-        $response = $this->get('/dashboard');
-        $response->assertRedirect('/login');
-    }
-
-    public function test_authenticated_users_can_visit_the_dashboard()
+    public function test_dashboard_page_is_displayed()
     {
         $user = User::factory()->create();
-        $this->actingAs($user);
 
+        $response = $this
+            ->actingAsWithJwt($user)
+            ->get('/dashboard');
+
+        $response->assertOk();
+    }
+
+    public function test_dashboard_cannot_be_accessed_by_guests()
+    {
         $response = $this->get('/dashboard');
-        $response->assertStatus(200);
+
+        $response->assertRedirect('/login');
     }
 }
